@@ -5,7 +5,7 @@
 ## SavedVariables: mdhelperDB
 ## Version: 20250109
 ## IconTexture: Interface\AddOns\MDHelperPlus\MDHelperPlus.jpg
-
+Update.lua
 db/DefaultDB.lua
 
 Options/API-Helper.lua
@@ -15,5 +15,9 @@ Options/API-UI-Core.lua
 UICore.lua
 
 EventHandler/InterruptHandler.lua
+EventHandler/avoidanceHandler.lua
+
+
 RegisterEvent/InterruptEvent.lua
+RegisterEvent/avoidanceEvent.lua
 

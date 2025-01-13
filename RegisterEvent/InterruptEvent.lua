@@ -62,7 +62,6 @@ eventFrameInterrupt:SetScript("OnEvent", function(self, event, unit)
                 end
             end
         elseif event == "UNIT_SPELLCAST_STOP" or event == "UNIT_SPELLCAST_CHANNEL_STOP" or event == "UNIT_SPELLCAST_INTERRUPTED" then
-
             -- 施法结束、失败或被打断时停止更新
             mucfp.HideProgress(interruptProgressbar, timerTexts[1], timerTexts[2],icons[1]);
         end

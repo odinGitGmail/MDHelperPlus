@@ -94,18 +94,29 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 
         -- 开启打断提醒
         local useInterrupt = muc.createCheckbox(
-            "chk_Interrupt", 
-            MDHelperFrame, 
-            1, 
-            "打断提醒", 
-            "打断提醒进度条", 
+            "chk_Interrupt",
+            MDHelperFrame,
+            1,
+            "打断提醒",
+            "打断提醒进度条",
             mdhelperDB.mdhUser.interrupt,
             function(chkBox)
                 mdhelperDB.mdhUser.interrupt = chkBox:GetChecked()
             end
             )
 
-
+        -- 减伤提醒
+        local useAvoidance = muc.createCheckbox(
+            "chk_Avoidance",
+            MDHelperFrame,
+            2,
+            "减伤提醒",
+            "被怪点名减伤提醒",
+            mdhelperDB.mdhUser.avoidance,
+            function(chkBox)
+                mdhelperDB.mdhUser.avoidance = chkBox:GetChecked()
+            end
+            )
 
         -- 打断提醒子面板
         local interruptSubPanel = CreateFrame("Frame", "interruptSubPanel", UIParent)
@@ -185,6 +196,8 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
                 interruptProgressbar:SetMovable(mdhelperDB.mdhUser.interruptProgressBar.drag)
                 interruptProgressbar:EnableMouse(mdhelperDB.mdhUser.interruptProgressBar.drag)
 
+                -- RaidNotice_AddMessage(RaidWarningFrame, "你被点名了！注意躲避！", ChatTypeInfo["RAID_WARNING"])
+                -- SendChatMessage("BOSS技能即将释放，请注意！", "PARTY")
                 -- 测试代码 判断打断法术是否存在 如果存在 判断是否冷却
                 -- if mdhelperDB.playerInfo.interruptSpellID~="" then
                 --     print(mdhelperDB.playerInfo.interruptSpellID)
@@ -265,5 +278,85 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
                 end
             end)
 
+
+
+        -- 更新日志面板
+        local updateSubPanel = CreateFrame("Frame", "updateSubPanel", UIParent)
+        updateSubPanel.name = "updateSubPanel"
+
+        -- 注册子面板
+        local category3 = Settings.RegisterCanvasLayoutSubcategory(category, updateSubPanel, "更新日志")
+        Settings.RegisterAddOnCategory(category3)
+
+        -- 标题
+        local updateSubPanelTitle = muc.createFont(16, -10 , updateSubPanel, "TOPLEFT", updateSubPanel, "TOPLEFT", "更新日志", 30)
+
+        local OpenUpDate = CreateFrame("Button", "OpenUpDate", updateSubPanel, "UIPanelButtonTemplate")
+        OpenUpDate:SetText("返回设置")
+        OpenUpDate:SetWidth(120)
+        OpenUpDate:SetHeight(22)
+        OpenUpDate:SetPoint("TOPRIGHT", -5, -5)
+        OpenUpDate:SetScript("OnClick", function()
+            Settings.OpenToCategory(category:GetID())
+        end)
+
+        --滚动框架
+        local updatescroll = CreateFrame("ScrollFrame", nil, updateSubPanel, "UIPanelScrollFrameTemplate")
+        updatescroll:SetPoint("TOPLEFT", updateSubPanel, "TOPLEFT", 0, -40)
+        updatescroll:SetPoint("BOTTOMRIGHT", updateSubPanel, "BOTTOMRIGHT", -20, 0)
+        --滚动内容
+        local ConFrame = CreateFrame("Frame", nil, updatescroll)
+        ConFrame:SetSize(670,480)
+        updatescroll:SetScrollChild(ConFrame)
+        mdhelper.updateY = 0	--设置起始位置
+
+        local Yoffset = -10
+        local textcolor = {0.8, 0.8, 0.8, 0.9}
+        local function AddUpdate(name)
+            local rowFrame = CreateFrame("Frame", nil, ConFrame)
+
+            rowFrame:SetPoint("TOPLEFT", 10, Yoffset)
+            rowFrame:SetSize(630, 26)
+            local SliderBackground = rowFrame:CreateTexture(nil, "BACKGROUND")
+            SliderBackground:SetTexture(130937)
+            SliderBackground:SetPoint("TOPLEFT",rowFrame,"TOPLEFT",0,0)
+            SliderBackground:SetColorTexture(0.5, 0.5, 0.5, 0.1) -- 设置背景颜色为黑色，透明度为0.5
+            SliderBackground:SetScript("OnEnter", function(self)
+                self:SetColorTexture(0.5, 0.5, 0.5, .3)
+            end)
+            SliderBackground:SetScript("OnLeave", function(self)
+                self:SetColorTexture(0.5, 0.5, 0.5, 0.1)
+            end)
+
+            local lefttext = rowFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+            lefttext:SetPoint("LEFT", SliderBackground, "LEFT", 5, -1)
+            lefttext:SetText(name)
+            lefttext:SetFont("fonts\\ARHei.ttf", 18, "OUTLINE")
+            lefttext:SetJustifyH("LEFT") 
+            lefttext:SetWordWrap(true)--换行
+            lefttext:SetWidth(623)
+            lefttext:SetSpacing(6)--间距
+            lefttext:SetTextColor(unpack(textcolor))--颜色
+            SliderBackground:SetSize(630,lefttext:GetHeight()+15)--背景颜色根据字体框架高度设置
+
+            Yoffset = Yoffset - 25 - lefttext:GetHeight()--后面的位置
+
+            textcolor = {0.6, 0.6, .6, 0.6}
+            mdhelper.updateY = mdhelper.updateY + 1
+        end
+
+        -- 收集更新表格
+        local keys = {}
+        for k in pairs(mdhelper.update) do
+            table.insert(keys, k)
+        end
+
+        -- 对表格进行排序
+        table.sort(keys, function(a, b) return a > b end)
+
+        -- 根据排序后的表格创建文本
+        for _, k in ipairs(keys) do
+            AddUpdate("|cff00FFFF"..k.." : |r"..mdhelper.update[k])
+        end
     end
 end)

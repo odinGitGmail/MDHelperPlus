@@ -1,4 +1,6 @@
 ﻿local AddonName,mdhelper = ...
+
+mdhelper = mdhelper or {}
 mdhelper.UI = {}
 mdhelper.UI.Func = {}
 mdhelper.UI.components = {}
@@ -26,6 +28,7 @@ mdhelper.Career = {
 mdhelper.defaults ={
     mdhUser = {
         interrupt = true,
+        avoidance = true,
         interruptProgressBar={
             show = false,
             width = 300,
@@ -45,9 +48,10 @@ mdhelper.defaults ={
     },
 }
 
+-- 需打断法术
 mdhelper.interruptSpellArray={
     -- test me 暴风雪
-    "190356",
+    -- "190356",
     --"11366",
 
     --塞兹迷雾仙林
@@ -171,10 +175,33 @@ mdhelper.interruptSpellArray={
     "200256",    --相位爆炸
 }
 
+-- 无法打断需要提醒开启减伤的法术
+mdhelper.avoidanceSpellArray={
+    -- test me 暴风雪
+    "190356",
+    --"11366",
+
+    -- 破晨号
+    "451119",   -- 深渊轰击
+    "451222",   -- 虚空奔袭
+
+    -- 仙林
+    "322486",   -- 过度生长
+    "463248",   -- 排斥
+    "324986",   -- 纱雾噬咬
+    "325223",   -- 心能注入
+    "451395",   -- 心能注入
+
+    -- 回响
+    "434802",   -- 感染
+
+    -- 通灵
+    "334747",   -- 感染
+}
+
 
 ----------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------
-
 
 -- 初始化配置
 local function InitializeDB(defaultTables, globalDb)
@@ -185,8 +212,8 @@ local function InitializeDB(defaultTables, globalDb)
 
     for key, value in pairs(defaultTables) do
         if type(value)=="table" then
-            if not globalDb[key] then 
-                globalDb[key]={} 
+            if not globalDb[key] then
+                globalDb[key]={}
             end
             InitializeDB(value,globalDb[key])
         else
@@ -201,8 +228,9 @@ end
 local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("ADDON_LOADED")
 eventFrame:SetScript("OnEvent", function(_, event, addonName)
-    if addonName == "MDHelper" then
+    if addonName == "MDHelperPlus" then
+        mdhelperDB = mdhelperDB or {}
         InitializeDB(mdhelper.defaults, mdhelperDB)  -- 加载配置
-        -- loopTable(mdhelperDB)
     end
 end)
+

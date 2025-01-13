@@ -1,0 +1,26 @@
+{
+    "Lua.runtime.version": "Lua 5.1",
+    "Lua.runtime.builtin": {
+        "basic": "disable",
+        "debug": "disable",
+        "io": "disable",
+        "math": "disable",
+        "os": "disable",
+        "package": "disable",
+        "string": "disable",
+        "table": "disable",
+        "utf8": "disable"
+    },
+    "Lua.workspace.library": [
+        "D:\\dev\\devTools\\VsCode-lua\\data\\extensions\\ketho.wow-api-0.18.2\\Annotations"
+    ],
+    "Lua.diagnostics.globals": [
+        "SlashCmdList",
+        "Settings",
+        "ReloadUI",
+        "FACTION_BAR_COLORS",
+        "RaidNotice_AddMessage",
+        "RaidWarningFrame",
+        "ChatTypeInfo"
+    ]
+}
