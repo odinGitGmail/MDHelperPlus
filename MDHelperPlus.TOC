@@ -1,0 +1,19 @@
+## Interface: 110000,110002
+## Title: |cff3399FFMDHelper|r大秘境助手
+## Notes: /mdh打开设置界面
+## Author: CN-凤凰之神-丷杠上开花丷
+## SavedVariables: mdhelperDB
+## Version: 20250109
+## IconTexture: Interface\AddOns\MDHelper\MDHelper.jpg
+
+db/DefaultDB.lua
+
+Options/API-Helper.lua
+Options/API-Components.lua
+Options/API-UI-Core.lua
+
+UICore.lua
+
+EventHandler/InterruptHandler.lua
+RegisterEvent/InterruptEvent.lua
+

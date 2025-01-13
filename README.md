@@ -1,2 +1,2 @@
 # MDHelperPlus
-wow interface addons MDHelperPlus
+wow addons MDHelper
