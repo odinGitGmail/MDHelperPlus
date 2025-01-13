@@ -1,5 +1,5 @@
 ﻿local AddonName,mdhelper = ...
-
+--  目中部分代码来源简繁的addui插件
 mdhelper = mdhelper or {}
 mdhelper.UI = {}
 mdhelper.UI.Func = {}
@@ -69,6 +69,7 @@ mdhelper.interruptSpellArray={
     "320822",        -- 最终交易
     "324293",        -- 刺耳尖啸
     "328667",        -- 寒冰箭雨
+    "338353",        -- 淤液喷撒
 
     --围攻伯拉勒斯
     "256957",        -- 防水甲壳
@@ -196,7 +197,8 @@ mdhelper.avoidanceSpellArray={
     "434802",   -- 感染
 
     -- 通灵
-    "334747",   -- 感染
+    "334747",   -- 投掷血肉
+    "323496",   -- 切肉飞刀
 }
 
 
