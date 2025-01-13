@@ -4,7 +4,7 @@
 ## Author: CN-凤凰之神-丷杠上开花丷
 ## SavedVariables: mdhelperDB
 ## Version: 20250109
-## IconTexture: Interface\AddOns\MDHelper\MDHelper.jpg
+## IconTexture: Interface\AddOns\MDHelperPlus\MDHelperPlus.jpg
 
 db/DefaultDB.lua
 
