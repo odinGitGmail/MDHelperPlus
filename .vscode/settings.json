@@ -12,7 +12,7 @@
         "utf8": "disable"
     },
     "Lua.workspace.library": [
-        "D:\\dev\\devTools\\VsCode-lua\\data\\extensions\\ketho.wow-api-0.18.2\\Annotations"
+        "/Applications/vsLua/code-portable-data/extensions/ketho.wow-api-0.18.2/Annotations"
     ],
     "Lua.diagnostics.globals": [
         "SlashCmdList",

@@ -8,9 +8,12 @@
 Update.lua
 db/DefaultDB.lua
 
-Options/API-Helper.lua
-Options/API-Components.lua
-Options/API-UI-Core.lua
+Options/CoreHelper.lua
+Options/UIHelper.lua
+Options/SpellsHelper.lua
+Options/CoreHelper.lua
+Options/ComponentsHelper.lua
+Options/UIHelper.lua.lua
 
 UICore.lua
 

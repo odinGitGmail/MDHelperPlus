@@ -1,14 +1,6 @@
-local addonName,mdhelper = ...
-
-local mcore = mdhelper.Core
-local mspells = mdhelper.Spells
-local muc = mdhelper.UI.components
-local mucf = mdhelper.UI.components.Func
-local muf = mdhelper.UI.Func
-
-
-
-mdhelper.UI.components.Func.Progress={}
+local addonName, mdhelper = ...
+local mah = mdhelper.AddonsHelper
+mdhelper.UI.components.Func.Progress = {}
 local mucfp = mdhelper.UI.components.Func.Progress
 
 
@@ -17,19 +9,21 @@ local mucfp = mdhelper.UI.components.Func.Progress
 ----------------------------------------------------------------------------------------------------------------------
 
 
+
 -- 定义更新函数
 local startTime, endTime, ticker
 local currentProgress = 0
 
 -- 施法进度条更新
 function mucfp.UpdateCastingProgress(interruptProgressbar, progressText, timerText, icon)
-    local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo("focus")
+    local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(
+        "focus")
     if name and startTime and endTime then
         -- 转换时间单位
-        startTime = startTime / 1000 -- 转换为秒
-        endTime = endTime / 1000 -- 转换为秒
-        local duration = endTime - startTime -- 总持续时间
-        local elapsed = GetTime() - startTime -- 已经经过的时间
+        startTime = startTime / 1000             -- 转换为秒
+        endTime = endTime / 1000                 -- 转换为秒
+        local duration = endTime - startTime     -- 总持续时间
+        local elapsed = GetTime() - startTime    -- 已经经过的时间
         local remainingTime = duration - elapsed -- 剩余时间
 
         -- 更新进度条
@@ -43,7 +37,7 @@ function mucfp.UpdateCastingProgress(interruptProgressbar, progressText, timerTe
 
         -- 更新图标
         local spellTexture = C_Spell.GetSpellTexture(spellID)
-        if spellTexture~=nil then
+        if spellTexture ~= nil then
             icon.iconTexture:SetTexture(spellTexture) -- 设置法术图标纹理
         end
 
@@ -72,10 +66,10 @@ function mucfp.UpdateChannelProgress(interruptProgressbar, progressText, timerTe
     local name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo("focus")
     if name and startTime and endTime then
         -- 转换时间单位
-        startTime = startTime / 1000 -- 转换为秒
-        endTime = endTime / 1000 -- 转换为秒
-        local duration = endTime - startTime -- 总持续时间
-        local elapsed = GetTime() - startTime -- 已经经过的时间
+        startTime = startTime / 1000             -- 转换为秒
+        endTime = endTime / 1000                 -- 转换为秒
+        local duration = endTime - startTime     -- 总持续时间
+        local elapsed = GetTime() - startTime    -- 已经经过的时间
         local remainingTime = duration - elapsed -- 剩余时间
 
         -- 更新进度条
@@ -89,7 +83,7 @@ function mucfp.UpdateChannelProgress(interruptProgressbar, progressText, timerTe
 
         -- 更新图标
         local spellTexture = C_Spell.GetSpellTexture(spellID)
-        if spellTexture~=nil then
+        if spellTexture ~= nil then
             icon.iconTexture:SetTexture(spellTexture) -- 设置法术图标纹理
         end
 
@@ -118,9 +112,9 @@ function mucfp.StartCastingProgress(interruptProgressbar, progressText, timerTex
     if not ticker then
         currentProgress = 0
         interruptProgressbar:Show()
-        muf.speekText("快打断")
+        mah.speekText("快打断")
         ticker = C_Timer.NewTicker(0.01, function()
-        mucfp.UpdateCastingProgress(interruptProgressbar, progressText, timerText, icon)
+            mucfp.UpdateCastingProgress(interruptProgressbar, progressText, timerText, icon)
         end) -- 每 0.1 秒调用更新函数
     end
 end
@@ -130,13 +124,12 @@ function mucfp.StartChannelProgress(interruptProgressbar, progressText, timerTex
     if not ticker then
         currentProgress = 0
         interruptProgressbar:Show()
-        muf.speekText("快打断")
+        mah.speekText("快打断")
         ticker = C_Timer.NewTicker(0.01, function()
-        mucfp.UpdateChannelProgress(interruptProgressbar, progressText, timerText, icon)
+            mucfp.UpdateChannelProgress(interruptProgressbar, progressText, timerText, icon)
         end) -- 每 0.1 秒调用更新函数
     end
 end
-
 
 -- 结束监控并隐藏打断进度条
 function mucfp.HideProgress(interruptProgressbar, progressText, timerText, icon)

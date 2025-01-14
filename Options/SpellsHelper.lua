@@ -1,48 +1,16 @@
-local addonName,mdhelper = ...
-local mcore = mdhelper.Core
+local addonName, mdhelper = ...
 local mspells = mdhelper.Spells
-local muc = mdhelper.UI.components
-local mucf = mdhelper.UI.components.Func
-local muf = mdhelper.UI.Func
 
 
 ----------------------------------------------------------------------------------------------------------------------
+---mdhelper.Spells 法术相关方法
 ----------------------------------------------------------------------------------------------------------------------
 
 
 
---mdhelper.Core  基础lua相关方法
-
--- 循环表结构
-function mcore.loopTable(tb)
-    for key, value in pairs(tb) do
-        if type(value)=="table" then
-                loopTable(value)
-        else
-            print("key",key,"value",value)
-        end
-    end
-end
-
--- 判断元素是否在数组中存在
-function mcore.containsElement(array, element)
-    for i, value in pairs(array) do
-        if string.format(element)==string.format(value) then
-            return true
-        end
-    end
-    return false
-end
-
-
-
 ----------------------------------------------------------------------------------------------------------------------
+---检查法术是否冷却
 ----------------------------------------------------------------------------------------------------------------------
-
-
--- mdhelper.Spell 法术相关方法
-
--- 检查法术是否冷却
 function mspells.CheckSpellCooldown(spellID)
     local spellInfo = C_Spell.GetSpellCooldown(spellID)
     if not spellInfo.isEnabled then
@@ -60,10 +28,11 @@ function mspells.CheckSpellCooldown(spellID)
     end
 end
 
-
--- 获取指定player的所有增益buff
+----------------------------------------------------------------------------------------------------------------------
+---获取指定player的所有增益buff
+----------------------------------------------------------------------------------------------------------------------
 function mspells.GetAllHelpFulBuffs(unitPlay)
-    local buffs = {} -- 用于存储增益/减益效果
+    local buffs = {} -- 用于存储增益buff
     -- 获取增益
     local i = 1
     while true do
@@ -78,14 +47,15 @@ function mspells.GetAllHelpFulBuffs(unitPlay)
     return buffs
 end
 
-
--- 获取指定player的所有增益buff
+----------------------------------------------------------------------------------------------------------------------
+---获取指定player的所有减益buff
+-------------------------------------------------------------------------------------------------------------------------
 function mspells.GetAllHarmFulBuffs(unitPlay)
-    local debuffs = {} -- 用于存储增益/减益效果
-    -- 获取增益
+    local debuffs = {} -- 用于存储减益buff
+    -- 获取减益
     local i = 1
     while true do
-        local debuff = C_UnitAuras.GetAuraDataByIndex(unitPlay, i, "HELPFUL")
+        local debuff = C_UnitAuras.GetAuraDataByIndex(unitPlay, i, "HARMUL")
         if debuff then
             table.insert(debuffs, debuff.spellId)
         else
@@ -95,4 +65,3 @@ function mspells.GetAllHarmFulBuffs(unitPlay)
     end
     return debuffs
 end
-

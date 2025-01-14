@@ -1,10 +1,6 @@
-local addonName,mdhelper = ...
+local addonName, mdhelper = ...
 local mcore = mdhelper.Core
 local mspells = mdhelper.Spells
-local muc = mdhelper.UI.components
-local mucf = mdhelper.UI.components.Func
-local muf = mdhelper.UI.Func
-local mucfp = mdhelper.UI.components.Func.Progress
 
 
 
@@ -24,16 +20,18 @@ eventFrameAvoidance:RegisterEvent("PLAYER_REGEN_ENABLED")
 
 -- 创建一个子框架，用于监听战斗日志事件
 local combatLogFrame = CreateFrame("Frame")
-combatLogFrame:Hide()  -- 默认隐藏，避免不必要的监听
+combatLogFrame:Hide() -- 默认隐藏，避免不必要的监听
 
 
 combatLogFrame:SetScript("OnEvent", function(self, event, ...)
     if mdhelperDB.mdhUser.avoidance then
-        local timestamp, subevent, _, sourceGUID, sourceName, _, _, destGUID, destName, _, _, spellID, spellName, _, _, isInterruptible = CombatLogGetCurrentEventInfo()
+        local timestamp, subevent, _, sourceGUID, sourceName, _, _, destGUID, destName, _, _, spellID, spellName, _, _, isInterruptible =
+            CombatLogGetCurrentEventInfo()
         -- 如果法术在需要减伤提醒的法术列表中
-        if mcore.containsElement(mdhelper.avoidanceSpellArray,spellID) then
+        if mcore.containsElement(mdhelper.avoidanceSpellArray, spellID) then
             -- 监控战斗相关逻辑
-            mspells.HandleCombatLogEvent(subevent, sourceGUID, sourceName, destGUID, destName, spellID, spellName, isInterruptible)
+            mspells.HandleCombatLogEvent(subevent, sourceGUID, sourceName, destGUID, destName, spellID, spellName,
+                isInterruptible)
         end
     end
 end)
@@ -50,6 +48,3 @@ eventFrameAvoidance:SetScript("OnEvent", function(self, event)
         combatLogFrame:Hide()
     end
 end)
-
-
-
