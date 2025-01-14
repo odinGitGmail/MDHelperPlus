@@ -376,7 +376,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
                 cellText:SetText(cellData)
                 cellText:SetPoint("CENTER")
             end
-
+if rowData[1]
             -- 删除按钮
             local deleteButton = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
             deleteButton:SetSize(60, rowHeight - 10)
