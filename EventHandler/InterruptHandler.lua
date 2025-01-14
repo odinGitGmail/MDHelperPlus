@@ -3,21 +3,18 @@ local mah = mdhelper.AddonsHelper
 mdhelper.UI.components.Func.Progress = {}
 local mucfp = mdhelper.UI.components.Func.Progress
 
-
-
 ----------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------------------------
-
-
 
 -- 定义更新函数
 local startTime, endTime, ticker
 local currentProgress = 0
 
 -- 施法进度条更新
-function mucfp.UpdateCastingProgress(interruptProgressbar, progressText, timerText, icon)
-    local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(
-        "focus")
+function mucfp.UpdateCastingProgress(interruptProgressbar, progressText,
+                                     timerText, icon)
+    local name, text, texture, startTime, endTime, isTradeSkill, castID,
+    notInterruptible, spellID = UnitCastingInfo("focus")
     if name and startTime and endTime then
         -- 转换时间单位
         startTime = startTime / 1000             -- 转换为秒
@@ -62,8 +59,10 @@ function mucfp.UpdateCastingProgress(interruptProgressbar, progressText, timerTe
 end
 
 -- 引导施法进度条更新
-function mucfp.UpdateChannelProgress(interruptProgressbar, progressText, timerText, icon)
-    local name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo("focus")
+function mucfp.UpdateChannelProgress(interruptProgressbar, progressText,
+                                     timerText, icon)
+    local name, text, texture, startTime, endTime, isTradeSkill,
+    notInterruptible, spellID = UnitChannelInfo("focus")
     if name and startTime and endTime then
         -- 转换时间单位
         startTime = startTime / 1000             -- 转换为秒
@@ -108,25 +107,29 @@ function mucfp.UpdateChannelProgress(interruptProgressbar, progressText, timerTe
 end
 
 -- 开始监控施法进度条
-function mucfp.StartCastingProgress(interruptProgressbar, progressText, timerText, icon)
+function mucfp.StartCastingProgress(interruptProgressbar, progressText,
+                                    timerText, icon)
     if not ticker then
         currentProgress = 0
         interruptProgressbar:Show()
         mah.speekText("快打断")
         ticker = C_Timer.NewTicker(0.01, function()
-            mucfp.UpdateCastingProgress(interruptProgressbar, progressText, timerText, icon)
+            mucfp.UpdateCastingProgress(interruptProgressbar, progressText,
+                timerText, icon)
         end) -- 每 0.1 秒调用更新函数
     end
 end
 
 -- 开始监控引导进度条
-function mucfp.StartChannelProgress(interruptProgressbar, progressText, timerText, icon)
+function mucfp.StartChannelProgress(interruptProgressbar, progressText,
+                                    timerText, icon)
     if not ticker then
         currentProgress = 0
         interruptProgressbar:Show()
         mah.speekText("快打断")
         ticker = C_Timer.NewTicker(0.01, function()
-            mucfp.UpdateChannelProgress(interruptProgressbar, progressText, timerText, icon)
+            mucfp.UpdateChannelProgress(interruptProgressbar, progressText,
+                timerText, icon)
         end) -- 每 0.1 秒调用更新函数
     end
 end

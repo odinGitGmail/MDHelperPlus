@@ -12,7 +12,7 @@
         "utf8": "disable"
     },
     "Lua.workspace.library": [
-        "/Applications/vsLua/code-portable-data/extensions/ketho.wow-api-0.18.2/Annotations"
+        "D:\\dev\\devTools\\VsCode-lua\\data\\extensions\\ketho.wow-api-0.18.2\\Annotations"
     ],
     "Lua.diagnostics.globals": [
         "SlashCmdList",
@@ -21,6 +21,9 @@
         "FACTION_BAR_COLORS",
         "RaidNotice_AddMessage",
         "RaidWarningFrame",
-        "ChatTypeInfo"
+        "ChatTypeInfo",
+        "PanelTemplates_SetNumTabs",
+        "PanelTemplates_SetTab",
+        "PanelTemplates_TabResize"
     ]
 }

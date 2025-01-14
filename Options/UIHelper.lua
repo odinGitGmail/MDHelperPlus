@@ -10,7 +10,7 @@ muf.Potin = {
     TOPLEFT = "TOPLEFT",
     TOPRIGHT = "TOPRIGHT",
     BOTTOMLEFT = "BOTTOMLEFT",
-    BOTTOMRIGHT = "BOTTOMRIGHT",
+    BOTTOMRIGHT = "BOTTOMRIGHT"
 }
 
 muf.RelativePoint = {
@@ -22,13 +22,12 @@ muf.RelativePoint = {
     TOPLEFT = "TOPLEFT",
     TOPRIGHT = "TOPRIGHT",
     BOTTOMLEFT = "BOTTOMLEFT",
-    BOTTOMRIGHT = "BOTTOMRIGHT",
+    BOTTOMRIGHT = "BOTTOMRIGHT"
 }
 
 ----------------------------------------------------------------------------------------------------------------------
 ---mdhelper.UI.Func UI先关的扩展方法
 ----------------------------------------------------------------------------------------------------------------------
-
 
 ----------------------------------------------------------------------------------------------------------------------
 ---清空frame的子元素 带递归
@@ -65,7 +64,10 @@ function muf.unitCareerColor(text, unit)
         local colorStr = RAID_CLASS_COLORS[class].colorStr
         return ("|c" .. colorStr .. text .. "|r")
     elseif UnitReaction(unit, "player") then
-        local color = FACTION_BAR_COLORS and FACTION_BAR_COLORS[UnitReaction(unit, "player")]
-        return ("|cff%.2x%.2x%.2x" .. text .. "|r"):format(color.r * 255, color.g * 255, color.b * 255)
+        local color = FACTION_BAR_COLORS and
+            FACTION_BAR_COLORS[UnitReaction(unit, "player")]
+        return ("|cff%.2x%.2x%.2x" .. text .. "|r"):format(color.r * 255,
+            color.g * 255,
+            color.b * 255)
     end
 end

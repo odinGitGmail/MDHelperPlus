@@ -1,12 +1,9 @@
 local addonName, mdhelper = ...
 local mspells = mdhelper.Spells
 
-
 ----------------------------------------------------------------------------------------------------------------------
 ---mdhelper.Spells 法术相关方法
 ----------------------------------------------------------------------------------------------------------------------
-
-
 
 ----------------------------------------------------------------------------------------------------------------------
 ---检查法术是否冷却
@@ -14,13 +11,13 @@ local mspells = mdhelper.Spells
 function mspells.CheckSpellCooldown(spellID)
     local spellInfo = C_Spell.GetSpellCooldown(spellID)
     if not spellInfo.isEnabled then
-        --print("法术不可用")
+        -- print("法术不可用")
         return false
     end
 
     if spellInfo.duration > 0 then
         -- local remainingTime = (startTime + duration - GetTime()) / modRate
-        --print(string.format("法术冷却中，剩余时间：%.2f 秒", remainingTime))
+        -- print(string.format("法术冷却中，剩余时间：%.2f 秒", remainingTime))
         return false
     else
         -- print("法术已就绪")
@@ -64,4 +61,16 @@ function mspells.GetAllHarmFulBuffs(unitPlay)
         i = i + 1
     end
     return debuffs
+end
+
+----------------------------------------------------------------------------------------------------------------------
+---获取指定法术的名称
+-------------------------------------------------------------------------------------------------------------------------
+function mspells.GetSepllName(spellID)
+    local spellInfo = C_Spell.GetSpellInfo(spellID)
+    if spellInfo then
+        return spellInfo.name
+    else
+        return ""
+    end
 end

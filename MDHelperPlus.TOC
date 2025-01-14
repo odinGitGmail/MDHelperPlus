@@ -11,16 +11,13 @@ db/DefaultDB.lua
 Options/CoreHelper.lua
 Options/UIHelper.lua
 Options/SpellsHelper.lua
-Options/CoreHelper.lua
 Options/ComponentsHelper.lua
-Options/UIHelper.lua.lua
 
 UICore.lua
+UICoreEventHandler.lua
 
 EventHandler/InterruptHandler.lua
 EventHandler/avoidanceHandler.lua
-
-
 RegisterEvent/InterruptEvent.lua
 RegisterEvent/avoidanceEvent.lua
 
