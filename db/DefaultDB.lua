@@ -7,6 +7,8 @@ mdhelper.UI.components = {}
 mdhelper.UI.components.Func = {}
 mdhelper.Core = {}
 mdhelper.Spells = {}
+mdhelper.AddonsHelper = {}
+
 
 mdhelper.fonts = {
     ARHei = "fonts\\ARHei.ttf",
@@ -33,7 +35,7 @@ mdhelper.Career = {
 -- 需打断法术
 mdhelper.interruptSpellArray = {
     -- test me 暴风雪
-    -- "190356",
+    "190356",
     -- "11366",
     -- 塞兹迷雾仙林
     "322938", -- 收割灵魂

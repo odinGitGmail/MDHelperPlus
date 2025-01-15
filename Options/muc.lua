@@ -43,11 +43,23 @@ end
 function muc.createFrame(frameType, frmaName, parentUI, xmlTemplate, uiPoint, size, backdrop, color)
 	local frame = {}
 	if xmlTemplate ~= nil then
-		frame = CreateFrame(frameType or "Frame", frmaName, parentUI, xmlTemplate)
+		if frameType ~= nil then
+			frame = CreateFrame(frameType, frmaName, parentUI, xmlTemplate)
+		else
+			frame = CreateFrame("Frame", frmaName, parentUI, xmlTemplate)
+		end
 	else
-		frame = CreateFrame(frameType or "Frame", frmaName, parentUI)
+		if frameType ~= nil then
+			frame = CreateFrame(frameType, frmaName, parentUI)
+		else
+			frame = CreateFrame("Frame", frmaName, parentUI)
+		end
 	end
+
 	if uiPoint ~= nil then
+		if #uiPoint == 4 then
+			table.insert(uiPoint, 2, parentUI) -- 插入父框架
+		end
 		frame:SetPoint(unpack(uiPoint))
 	end
 	if size ~= nil then
@@ -70,6 +82,11 @@ function muc.createFrame(frameType, frmaName, parentUI, xmlTemplate, uiPoint, si
 			frame:SetBackdropBorderColor(unpack(color.backdropBorderColor))
 		end
 	end
+
+	if frameType == "ScrollFrame" then
+		frame.ScrollBar:Show()
+	end
+	return frame
 end
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -79,8 +96,13 @@ function muc.createHorizontalSliderBar(sliderBarName, parentUI, xmlTemplate, siz
 									   uiPoint, soliderHandler)
 	-- 创建一个滑动条
 	local slider = CreateFrame("Slider", sliderBarName, parentUI, xmlTemplate or "OptionsSliderTemplate")
-	slider:SetSize(unpack(size))     -- 设置滑动条的宽度和高度
-	slider:SetPoint(unpack(uiPoint)) -- 将文本框置于屏幕中央
+	slider:SetSize(unpack(size))
+	if uiPoint ~= nil then
+		if #uiPoint == 4 then
+			table.insert(uiPoint, 2, parentUI) -- 插入父框架
+		end
+		slider:SetPoint(unpack(uiPoint))
+	end                              -- 设置滑动条的宽度和高度
 	slider:SetMinMaxValues(0, 100)   -- 设置滑动条的最小值和最大值
 	slider:SetValue(50)              -- 设置滑动条的初始值
 	slider:SetValueStep(1)           -- 设置滑动条的步进值
@@ -106,7 +128,12 @@ function muc.createVerticalSliderBar(sliderBarName, parentUI, xmlTemplate, size,
 	-- 创建滑动条的滑块
 	local slider = CreateFrame("Slider", sliderBarName, parentUI, xmlTemplate or "OptionsSliderTemplate")
 	slider:SetSize(unpack(size))
-	slider:SetPoint(unpack(uiPoint)) -- 将文本框置于屏幕中央
+	if uiPoint ~= nil then
+		if #uiPoint == 4 then
+			table.insert(uiPoint, 2, parentUI) -- 插入父框架
+		end
+		slider:SetPoint(unpack(uiPoint))
+	end
 	slider:SetMinMaxValues(0, 100) -- 设置滑动条的最小值和最大值
 	slider:SetValue(50)            -- 设置滑动条的初始值
 	slider:SetValueStep(1)         -- 设置滑动条的步进值
@@ -172,8 +199,13 @@ function muc.createProgressBar(progressBarName, parentUI, xmlTemplate, size,
 		progressBar = CreateFrame("StatusBar", progressBarName, parentUI)
 	end
 
-	progressBar:SetSize(unpack(size))            -- 设置进度条大小
-	progressBar:SetPoint(unpack(uiPoint))        -- 将文本框置于屏幕中央
+	progressBar:SetSize(unpack(size))
+	if uiPoint ~= nil then
+		if #uiPoint == 4 then
+			table.insert(uiPoint, 2, parentUI) -- 插入父框架
+		end
+		progressBar:SetPoint(unpack(uiPoint))
+	end
 	progressBar:SetMinMaxValues(minValue, maxValue) -- 设置进度条的最小值和最大值
 	progressBar:SetValue(0)                      -- 初始化进度条为 0
 	progressBar:SetStatusBarTexture(barTexture)  -- 设置进度条样式
@@ -199,8 +231,14 @@ function muc.createProgressBar(progressBarName, parentUI, xmlTemplate, size,
 		for index = 1, #progressTexts do
 			local pTextText = progressTexts[index].text
 			local timerText = progressBar:CreateFontString(nil, "OVERLAY", "GameFontNormal") -- 创建文本显示
-			timerText:SetPoint(unpack(progressTexts[index].uiPoint))                -- 将文本框置于屏幕中央
-			timerText:SetText(pTextText)                                            -- 初始化文本内容
+			if progressTexts[index].uiPoint ~= nil then
+				local pupt = progressTexts[index].uiPoint
+				if #pupt == 4 then
+					table.insert(pupt, 2, progressBar) -- 插入父框架
+				end
+				timerText:SetPoint(unpack(pupt))
+			end
+			timerText:SetText(pTextText) -- 初始化文本内容
 			table.insert(pTexts, timerText)
 		end
 	end
@@ -211,7 +249,14 @@ function muc.createProgressBar(progressBarName, parentUI, xmlTemplate, size,
 			local pIcon = progressIcons[index].iconID or nil
 			local iconFrame = CreateFrame("Frame", nil, progressBar)
 			iconFrame:SetSize(unpack(progressIcons[index].size)) -- 设置图标大小
-			iconFrame:SetPoint(unpack(progressIcons[index].uiPoint)) -- 设置图标位置
+			if progressIcons[index].uiPoint ~= nil then
+				local pup = progressIcons[index].uiPoint
+				if #pup == 4 then
+					table.insert(pup, 2, progressBar) -- 插入父框架
+				end
+				iconFrame:SetPoint(unpack(pup))
+			end
+
 
 			-- 创建纹理
 			iconFrame.iconTexture = iconFrame:CreateTexture(nil, "ARTWORK")
@@ -256,27 +301,38 @@ end
 ---文本
 ----------------------------------------------------------------------------------------------------------------------
 function muc.createFont(createframe, stringName, layer, xmlTemplate, uiPoint, text, fontSetting)
-	local font = {}
-	if xmlTemplate ~= nil then
-		font = createframe:CreateFontString(stringName, layer or "ARTWORK", xmlTemplate or mfx.GameFontNormal)
-	else
-		font = createframe:CreateFontString(stringName, layer or "ARTWORK")
-	end
-	if uiPoint ~= nill then
+	-- 创建 FontString
+	local font = createframe:CreateFontString(
+		stringName,
+		layer or "ARTWORK",
+		xmlTemplate or mfx.GameFontNormal)
+
+	-- 设置锚点
+	if uiPoint then
+		if #uiPoint == 4 then
+			table.insert(uiPoint, 2, createframe) -- 插入父框架
+		end
 		font:SetPoint(unpack(uiPoint))
 	end
-	if text ~= nil then
+
+	-- 设置文本内容
+	if text then
 		font:SetText(text)
 	end
-	if fontSetting ~= nil then
+
+	-- 设置字体
+	if fontSetting then
 		if type(fontSetting) == "table" then
 			font:SetFont(unpack(fontSetting))
-		else
+		elseif type(fontSetting) == "number" then
 			font:SetFont(mf.ARHei, fontSetting, "OUTLINE")
+		else
+			font:SetFont(mf.ARHei, 15, "OUTLINE") -- 默认字体大小
 		end
 	else
-		font:SetFont(mf.ARHei, 15, "OUTLINE")
+		font:SetFont(mf.ARHei, 15, "OUTLINE") -- 默认字体大小
 	end
+
 	return font
 end
 
@@ -291,7 +347,13 @@ function muc.createTextBox(txtBoxName, parentUI, xmlTemplate, size, uiPoint, def
 		textBox = CreateFrame("EditBox", txtBoxName, parentUI)
 	end
 	textBox:SetSize(unpack(size)) -- 设置宽度和高度
-	textBox:SetPoint(unpack(uiPoint))
+	if uiPoint ~= nil then
+		if #uiPoint == 4 then
+			table.insert(uiPoint, 2, parentUI) -- 插入父框架
+		end
+		textBox:SetPoint(unpack(uiPoint))
+	end
+
 	textBox:SetAutoFocus(false) -- 禁止自动聚焦，避免影响其他操作
 	if defaultTxt ~= nil and defaultTxt ~= "" then
 		textBox:SetText(defaultTxt) -- 设置默认文本
@@ -315,7 +377,10 @@ function muc.createButton(btnName, btnText, parentUI, xmlTemplate, size,
 		button:SetSize(unpack(size))
 	end
 	if uiPoint ~= nil then
-		button:SetPoint(unpack(uiPoint)) -- 将文本框置于屏幕中央
+		if #uiPoint == 4 then
+			table.insert(uiPoint, 2, parentUI) -- 插入父框架
+		end
+		button:SetPoint(unpack(uiPoint))
 	end
 	if btnClickHandler ~= nil then
 		button:SetScript("OnClick", function(self) btnClickHandler(self) end)
@@ -373,7 +438,12 @@ function muc.createCheckbox(checkBoxName, parentUI, xmlTemplate, uiPoint, text, 
 	else
 		check = CreateFrame("CheckButton", checkBoxName, parentUI)
 	end
-	check:SetPoint(unpack(uiPoint))
+	if uiPoint ~= nil then
+		if #uiPoint == 4 then
+			table.insert(uiPoint, 2, parentUI) -- 插入父框架
+		end
+		check:SetPoint(unpack(uiPoint))
+	end
 	check:SetChecked(defaultCheck)
 	check.text:SetText(text)
 	-- 鼠标移入显示 tip
@@ -423,9 +493,11 @@ function muc.createTableRow(rowParentUI,
 							rowHeight,
 							rowBackDropColor,
 							cellSize,
-							cellPoint,
+							cellWidth,
 							cellTextPoint,
-							deleteBtn)
+							deleteBtn,
+							rowIndex,
+							cellCount)
 	local row = muc.createFrame(nil, nil, rowParentUI, nil, nil, { rowParentUI:GetWidth() - 20, rowHeight })
 	-- 行背景
 	local rowBg = row:CreateTexture(nil, "BACKGROUND")
@@ -445,29 +517,33 @@ function muc.createTableRow(rowParentUI,
 
 	-- 创建列
 	for index, value in pairs(rowData) do
-		local cell = muc.createFrame(nil, nil, row, nil, cellPoint, cellSize) -- point default "LEFT", row, "LEFT", (j - 1) * cellWidth, 0
+		local cell = muc.createFrame(nil, nil, row, nil, { "LEFT", "LEFT", (index - 1) * cellWidth, 0 }, cellSize) -- point default "LEFT", row, "LEFT", (j - 1) * cellWidth, 0
 		local cellText = muc.createFont(
 			cell,
 			nil,
-			"OVERLAY",
-			mfx.GameFontNormal,
-			cellTextPoint,
-			value
-		)
-	end
-	if deleteBtn ~= nil then
-		-- 删除按钮
-		local deleteButton = muc.createButton(
 			nil,
-			deleteBtn.btnText,
-			row,
-			deleteBtn.xmlTemplate,
-			deleteBtn.size,
-			deleteBtn.point,
-			function()
-				deleteBtn.btnClickHandler()
-			end
-		)
+			nil,
+			cellTextPoint,
+			value,
+			15)
 	end
+	if rowIndex ~= 1 then
+		if deleteBtn ~= nil then
+			-- 删除按钮
+			local deleteButton = muc.createButton(
+				nil,
+				deleteBtn.btnText,
+				row,
+				deleteBtn.xmlTemplate,
+				deleteBtn.size,
+				{ "LEFT", row, "LEFT", (cellCount - 1) * cellWidth + 20, 0 },
+				function(self)
+					deleteBtn.btnClickHandler(self)
+				end
+			)
+			deleteButton.Tip = rowIndex
+		end
+	end
+	row.rowIndex = rowIndex
 	return row
 end

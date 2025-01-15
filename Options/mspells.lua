@@ -63,10 +63,21 @@ end
 ----------------------------------------------------------------------------------------------------------------------
 ---获取指定法术的名称
 function mspells.GetSepllName(spellID)
+    if not spellID then
+        --print("Error: Spell ID is nil.")
+        return ""
+    end
+
+    if type(spellID) ~= "number" and type(spellID) ~= "string" then
+        --print("Error: Spell ID must be a number or string.", spellID)
+        return ""
+    end
+
     local spellInfo = C_Spell.GetSpellInfo(spellID)
     if spellInfo then
         return spellInfo.name
     else
+        --print("Error: Invalid Spell ID or Spell Name -", spellID)
         return ""
     end
 end

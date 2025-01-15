@@ -2,7 +2,7 @@ local addonName, mdhelper = ...
 local muc = mdhelper.UI.components
 local muf = mdhelper.UI.Func
 local mspells = mdhelper.Spells
-
+local mf = mdhelper.fonts
 --[[
 UI界面生成
 ]] --
@@ -71,7 +71,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             15)
         -- 重载按钮
         local reloadBtn = muc.createButton(
-            "reloadBtn", "重载", MDHelperFrame, nil,
+            "reloadBtn", "重载", MDHelperFrame, "UIPanelButtonTemplate",
             { 70, 30 },
             { "TOPLEFT", "TOPLEFT", 450, -40 },
             function(btnSelf) ReloadUI() end)
@@ -120,7 +120,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         -- 重载按钮
         local saveInterruptSpellIDBtn = muc.createButton(
             "saveInterruptSpellIDBtn", "确定",
-            MDHelperFrame, nil,
+            MDHelperFrame, "UIPanelButtonTemplate",
             { 70, 30 },
             { "TOPLEFT", "TOPLEFT", 400, -80 },
             function(btnSelf)
@@ -174,9 +174,15 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             nil,
             "OVERLAY",
             "GameFontNormalLarge",
-            { "TOPLEFT", 0, -16 },
-            "打断提醒", 15
+            { "TOPLEFT", "TOPLEFT", 0, -16 },
+            "打断提醒", 20
         )
+
+        local saveReloadBtn = muc.createButton(
+            "saveReloadBtn", "保存重载", interruptSubPanel, "UIPanelButtonTemplate",
+            { 70, 30 },
+            { "TOPLEFT", "TOPLEFT", 100, -10 },
+            function(btnSelf) ReloadUI() end)
 
         -- 打断提醒进度条
         local interruptProgressbar, timerTexts, iconFrams =
@@ -201,17 +207,17 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
                 },
                 {
                     {
-                        ui { "LEFT", "LEFT", mdhelperDB.mdhUser.interruptProgressBar.height + 10, 0, },
+                        uiPoint = { "LEFT", "LEFT", mdhelperDB.mdhUser.interruptProgressBar.height + 10, 0, },
                         text = "",
                     },
                     {
-                        ui { "RIGHT", "RIGHT", -10, 0, },
+                        uiPoint = { "RIGHT", "RIGHT", -10, 0, },
                         text = ""
                     }
                 },
                 {
                     {
-                        ui { "LEFT", "LEFT", 0, 0, },
+                        uiPoint = { "LEFT", "LEFT", 0, 0, },
                         size = {
                             mdhelperDB.mdhUser.interruptProgressBar.height,
                             mdhelperDB.mdhUser.interruptProgressBar.height
@@ -234,7 +240,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         local interruptProgressbarBtn = muc.createButton(
             "interruptProgressbarBtn",
             interruptProgressbarBtnTxt,
-            interruptSubPanel, nil,
+            interruptSubPanel, "UIPanelButtonTemplate",
             { 70, 30 },
             { "TOPLEFT", "TOPLEFT", 0, -40 },
             function(btnSelf)
@@ -322,7 +328,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             "settingLeftPanelFrame",
             settingPanelFrame,
             "BackdropTemplate",
-            { "TOPLEFT", 5, 0 },
+            { "TOPLEFT", "TOPLEFT", 5, 0 },
             { 200, 500 },
             {
                 bgFile = nil,                                             -- 背景纹理
@@ -347,7 +353,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             "rightInterruptSpellsFrame",
             settingPanelFrame,
             nil,
-            { "TOPLEFT", 200, 0 },
+            { "TOPLEFT", "TOPLEFT", 200, 0 },
             { 460, 500 }
         )
         rightFrams["interruptSpells"] = rightInterruptSpellsFrame
@@ -356,9 +362,11 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             "ScrollFrame",
             "rightInterruptSpellsScrollFrame",
             rightInterruptSpellsFrame,
-            nil,
+            "UIPanelScrollFrameTemplate",
             { "BOTTOMRIGHT", rightInterruptSpellsFrame, "BOTTOMRIGHT", 0, 0 },
-            { 460, 450 }
+            { 460, 450 },
+            nil,
+            nil
         )
         -- 右侧打断法术滚动内容容器
         local rightInterruptSpellsScrollContentFrame = muc.createFrame(
@@ -384,16 +392,17 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         local rowHeight = 30
         local cellWidth = 100
         local rowPadding = 2
-        local rows = {}
+        local cellCount = 4
+        local interruptSpellsRows = {}
         local interruptSpells = {
-            { "序号", "法术ID", "法术名称" }
+            { "序号", "法术ID", "法术名称", "删除" }
         }
         for i, v in pairs(mdhelperDB.addonData.interruptSpellArray) do
             table.insert(interruptSpells, { i, v, mspells.GetSepllName(v) })
         end
 
         local function UpdateTableRightInterruptSpellsScrollContentFrame()
-            for i, row in ipairs(rows) do
+            for i, row in pairs(interruptSpellsRows) do
                 row:ClearAllPoints()
                 row:SetPoint(
                     "TOP",
@@ -413,27 +422,29 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
                 rowHeight,
                 { defaultColor = { 0, 0, 0, 0 }, enterColor = { 0.2, 0.4, 0.8, 0.5 } },
                 { cellWidth, rowHeight },
-                { "LEFT", "LEFT", (index - 1) * cellWidth, 0 },
+                cellWidth,
                 { "CENTER" },
                 {
                     btnText = "删除",
                     xmlTemplate = "UIPanelButtonTemplate",
                     size = { 60, rowHeight - 10 },
-                    point = { "RIGHT", row, "RIGHT", -10, 0 },
-                    btnClickHandler = function()
-                        for i, r in pairs(rows) do
-                            if r == row then
+                    point = { "RIGHT", "RIGHT", -10, 0 },
+                    btnClickHandler = function(btn)
+                        for i, row in pairs(interruptSpellsRows) do
+                            if row.rowIndex == btn.Tip then
                                 -- 删除对应的行
-                                table.remove(rows, i)
+                                table.remove(interruptSpellsRows, i)
                                 row:Hide()
                                 break
                             end
                         end
                         UpdateTableRightInterruptSpellsScrollContentFrame()
                     end
-                }
+                },
+                index,
+                cellCount
             )
-            table.insert(rows, row)
+            table.insert(interruptSpellsRows, row)
             UpdateTableRightInterruptSpellsScrollContentFrame()
         end
 
@@ -457,9 +468,11 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             "ScrollFrame",
             "rightAvoidanceSpellsScrollFrame",
             rightAvoidanceSpellsFrame,
-            nil,
+            "UIPanelScrollFrameTemplate",
             { "BOTTOMRIGHT", rightAvoidanceSpellsFrame, "BOTTOMRIGHT", 0, 0 },
-            { 460, 450 }
+            { 460, 450 },
+            nil,
+            nil
         )
         -- 右侧打断法术滚动内容容器
         local rightAvoidanceSpellsScrollContentFrame = muc.createFrame(
@@ -480,16 +493,16 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             nil
         )
 
-
+        local avoidanceSpellsRows = {}
         local avoidanceSpells = {
-            { "序号", "法术ID", "法术名称" }
+            { "序号", "法术ID", "法术名称", "删除" }
         }
         for i, v in pairs(mdhelperDB.addonData.avoidanceSpellArray) do
             table.insert(avoidanceSpells, { i, v, mspells.GetSepllName(v) })
         end
 
         local function UpdateTableRightAvoidanceSpellsScrollContentFrame()
-            for i, row in ipairs(rows) do
+            for i, row in pairs(avoidanceSpellsRows) do
                 row:ClearAllPoints()
                 row:SetPoint(
                     "TOP",
@@ -504,32 +517,34 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         for index, value in pairs(avoidanceSpells) do
             local rowData = value
             local row = muc.createTableRow(
-                rightInterruptSpellsScrollContentFrame,
+                rightAvoidanceSpellsScrollContentFrame,
                 rowData,
                 rowHeight,
                 { defaultColor = { 0, 0, 0, 0 }, enterColor = { 0.2, 0.4, 0.8, 0.5 } },
                 { cellWidth, rowHeight },
-                { "LEFT", "LEFT", (index - 1) * cellWidth, 0 },
+                cellWidth,
                 { "CENTER" },
                 {
                     btnText = "删除",
                     xmlTemplate = "UIPanelButtonTemplate",
                     size = { 60, rowHeight - 10 },
-                    point = { "RIGHT", row, "RIGHT", -10, 0 },
-                    btnClickHandler = function()
-                        for i, r in pairs(rows) do
-                            if r == row then
+                    point = { "RIGHT", "RIGHT", -10, 0 },
+                    btnClickHandler = function(btn)
+                        for i, row in pairs(avoidanceSpellsRows) do
+                            if row.rowIndex == btn.Tip then
                                 -- 删除对应的行
-                                table.remove(rows, i)
+                                table.remove(avoidanceSpellsRows, i)
                                 row:Hide()
                                 break
                             end
                         end
                         UpdateTableRightAvoidanceSpellsScrollContentFrame()
                     end
-                }
+                },
+                index,
+                cellCount
             )
-            table.insert(rows, row)
+            table.insert(avoidanceSpellsRows, row)
             UpdateTableRightAvoidanceSpellsScrollContentFrame()
         end
 
@@ -549,7 +564,8 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         local interruptSpellsBtn = muc.createButton(
             "interruptSpellsBtn",
             "打断列表",
-            settingLeftPanelFrame, nil,
+            settingLeftPanelFrame,
+            "UIPanelButtonTemplate",
             { 150, 30 },
             { "TOP", "TOP", 5, -5 },
             function(btnSelf)
@@ -567,7 +583,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             "avoidanceSpellsBtn",
             "减伤列表",
             settingLeftPanelFrame,
-            nil,
+            "UIPanelButtonTemplate",
             { 150, 30 },
             { "TOP", "TOP", 5, -40 },
             function(btnSelf)
@@ -626,7 +642,6 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         local textcolor = { 0.8, 0.8, 0.8, 0.9 }
         local function AddUpdate(name)
             local rowFrame = CreateFrame("Frame", nil, ConFrame)
-
             rowFrame:SetPoint("TOPLEFT", 10, Yoffset)
             rowFrame:SetSize(630, 26)
             local SliderBackground = rowFrame:CreateTexture(nil, "BACKGROUND")
@@ -655,9 +670,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             lefttext:SetSpacing(6)                                   -- 间距
             lefttext:SetTextColor(unpack(textcolor))                 -- 颜色
             SliderBackground:SetSize(630, lefttext:GetHeight() + 15) -- 背景颜色根据字体框架高度设置
-
             Yoffset = Yoffset - 25 - lefttext:GetHeight()            -- 后面的位置
-
             textcolor = { 0.6, 0.6, .6, 0.6 }
             mdhelper.updateY = mdhelper.updateY + 1
         end
