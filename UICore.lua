@@ -2,6 +2,11 @@ local addonName, mdhelper = ...
 local muc = mdhelper.UI.components
 local muf = mdhelper.UI.Func
 local mspells = mdhelper.Spells
+
+--[[
+UI界面生成
+]] --
+
 local eventFrame = CreateFrame("Frame")
 -- 注册 PLAYER_LOGIN 事件
 eventFrame:RegisterEvent("PLAYER_LOGIN")
@@ -27,10 +32,11 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         ----------------------------------------------------------------------------------------------------------------------
         ---注册创建主框架面板到addonCategory
         ----------------------------------------------------------------------------------------------------------------------
-        local registerMainCategory = muc.registerCanvasLayoutCategory({
-            frame = MDHelperFrame,
-            text = "大秘境助手"
-        })
+        local registerMainCategory = muc.registerCanvasLayoutCategory(
+            {
+                frame = MDHelperFrame,
+                text = "大秘境助手"
+            })
 
         -- 注册斜杠命令
         SLASH_MDHELPER1 = "/mdh"
@@ -39,86 +45,103 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         end
 
         -- 标题
-        local MDHelperTitle = muc.createFont(MDHelperFrame, muf.createMdhPotin(
-            muf.Potin.TOPLEFT,
-            muf.RelativePoint.TOPLEFT, 16,
-            -10), "大秘境助手", 30)
+        local MDHelperTitle = muc.createFont(
+            MDHelperFrame,
+            nil,
+            nil,
+            nil,
+            { "TOPLEFT", "TOPLEFT", 16, -10 },
+            "大秘境助手", 30)
         -- 子标题
-        local MDHelperSubTitle = muc.createFont(MDHelperFrame,
-            muf.createMdhPotin(
-                muf.Potin.TOPLEFT,
-                muf.RelativePoint.TOPLEFT,
-                170, -15),
+        local MDHelperSubTitle = muc.createFont(
+            MDHelperFrame,
+            nil,
+            nil,
+            nil,
+            { "TOPLEFT", "TOPLEFT", 170, -15 },
             "大秘境增强功能", 20)
         -- 功能描述
-        local MDHelperDescription = muc.createFont(MDHelperFrame,
-            muf.createMdhPotin(
-                muf.Potin.TOPLEFT,
-                muf.RelativePoint.TOPLEFT,
-                16, -50),
+        local MDHelperDescription = muc.createFont(
+            MDHelperFrame,
+            nil,
+            nil,
+            nil,
+            { "TOPLEFT", "TOPLEFT", 16, -50 },
             "大部分功能改动后需要重载界面",
             15)
         -- 重载按钮
-        local reloadBtn = muc.createButton("reloadBtn", "重载", MDHelperFrame,
-            70, 30, muf.createMdhPotin(
-                muf.Potin.TOPLEFT,
-                muf.RelativePoint.TOPLEFT, 450,
-                -40),
+        local reloadBtn = muc.createButton(
+            "reloadBtn", "重载", MDHelperFrame, nil,
+            { 70, 30 },
+            { "TOPLEFT", "TOPLEFT", 450, -40 },
             function(btnSelf) ReloadUI() end)
 
         -- 职业选择label
-        local unitCareerlbl = muc.createFont(MDHelperFrame, muf.createMdhPotin(
-            muf.Potin.TOPLEFT,
-            muf.RelativePoint.TOPLEFT, 16,
-            -90), "当前职业:", 15)
+        local unitCareerlbl = muc.createFont(
+            MDHelperFrame,
+            nil,
+            nil,
+            nil,
+            { "TOPLEFT", "TOPLEFT", 16, -90 },
+            "当前职业:", 15)
+
         local _, class = UnitClass("player")
         local ucc = muf.unitCareerColor(mdhelper.Career[string.lower(class)],
             "player")
-        local unitCareer = muc.createFont(MDHelperFrame, muf.createMdhPotin(
-                muf.Potin.TOPLEFT,
-                muf.RelativePoint.TOPLEFT, 90, -90),
+        local unitCareer = muc.createFont(
+            MDHelperFrame,
+            nil,
+            nil,
+            nil,
+            { "TOPLEFT", "TOPLEFT", 90, -90 },
             ucc, 15)
 
         -- 打断法术ID label
         local interruptSpellIDlbl = muf.unitCareerColor(
             mdhelper.Career[string.lower(class)],
             "player")
-        local unitCareer = muc.createFont(MDHelperFrame, muf.createMdhPotin(
-            muf.Potin.TOPLEFT,
-            muf.RelativePoint.TOPLEFT, 180,
-            -90), "打断法术ID", 15)
+        local unitCareer = muc.createFont(
+            MDHelperFrame,
+            nil,
+            nil,
+            nil,
+            { "TOPLEFT", "TOPLEFT", 180, -90 },
+            "打断法术ID", 15)
 
         -- 打断法术ID选择
         local interruptSpellIDTxtBox = muc.createTextBox(
             "interruptSpellIDTxtBox",
-            MDHelperFrame, 120, 45,
-            muf.createMdhPotin(muf.Potin.TOPLEFT,
-                muf.RelativePoint
-                .TOPLEFT, 270,
-                -75),
+            MDHelperFrame,
+            nil,
+            { 120, 45 },
+            { "TOPLEFT", reloadBtn = "TOPLEFT", 270, -75 },
             mdhelperDB["playerInfo"]["interruptSpellID"])
 
         -- 重载按钮
         local saveInterruptSpellIDBtn = muc.createButton(
             "saveInterruptSpellIDBtn", "确定",
-            MDHelperFrame, 70, 30,
-            muf.createMdhPotin(
-                muf.Potin.TOPLEFT,
-                muf.RelativePoint.TOPLEFT, 400,
-                -80), function(btnSelf)
+            MDHelperFrame, nil,
+            { 70, 30 },
+            { "TOPLEFT", "TOPLEFT", 400, -80 },
+            function(btnSelf)
                 mdhelper.UICore.saveInterruptSpellIDBtnClick(
                     interruptSpellIDTxtBox, mdhelperDB)
             end)
 
         -- 大秘境功能
-        local mdhItemlbl = muc.createFont(MDHelperFrame, muf.createMdhPotin(
-            muf.Potin.TOPLEFT,
-            muf.RelativePoint.TOPLEFT, 20,
-            -120), "大秘境功能", 15)
+        local mdhItemlbl = muc.createFont(
+            MDHelperFrame,
+            nil,
+            nil,
+            nil,
+            { "TOPLEFT", "TOPLEFT", 20, -120 },
+            "大秘境功能", 15)
 
         -- 开启打断提醒
-        local useInterrupt = muc.createCheckboxBy3Column("chk_Interrupt",
-            MDHelperFrame, 1,
+        local useInterrupt = muc.createCheckboxBy3Column(
+            "chk_Interrupt",
+            MDHelperFrame,
+            1,
             "打断提醒",
             "打断提醒进度条",
             mdhelperDB.mdhUser
@@ -146,50 +169,53 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         interruptSubPanel.name = "interruptSubPanel"
 
         -- 添加标题
-        local interruptSubTitle = interruptSubPanel:CreateFontString(nil,
+        local interruptSubTitle = muc.createFont(
+            interruptSubPanel,
+            nil,
             "OVERLAY",
-            "GameFontNormalLarge")
-        interruptSubTitle:SetPoint("TOPLEFT", 0, -16)
-        interruptSubTitle:SetText("打断提醒")
+            "GameFontNormalLarge",
+            { "TOPLEFT", 0, -16 },
+            "打断提醒", 15
+        )
 
         -- 打断提醒进度条
         local interruptProgressbar, timerTexts, iconFrams =
-            muc.createProgressBar("interruptProgressBar", UIParent,
-                mdhelperDB.mdhUser.interruptProgressBar.width,
-                mdhelperDB.mdhUser.interruptProgressBar.height,
+            muc.createProgressBar(
+                "interruptProgressBar",
+                UIParent,
+                nil,
+                {
+                    mdhelperDB.mdhUser.interruptProgressBar.width, mdhelperDB.mdhUser.interruptProgressBar.height
+                },
                 "Interface\\Addons\\AddUI\\UI\\Textures\\colorbar.tga",
-                muf.createMdhPotin(
-                    mdhelperDB.mdhUser.interruptProgressBar
-                    .point, mdhelperDB.mdhUser
-                    .interruptProgressBar.relativePoint,
-                    mdhelperDB.mdhUser.interruptProgressBar
-                    .offx, mdhelperDB.mdhUser
-                    .interruptProgressBar.offy), 0, 100,
+                {
+                    mdhelperDB.mdhUser.interruptProgressBar.point,
+                    mdhelperDB.mdhUser.interruptProgressBar.relativePoint,
+                    mdhelperDB.mdhUser.interruptProgressBar.offx,
+                    mdhelperDB.mdhUser.interruptProgressBar.offy
+                },
+                0, 100,
                 {
                     drag = mdhelperDB.mdhUser.interruptProgressBar.drag,
                     show = mdhelperDB.mdhUser.interruptProgressBar.show
-                }, {
+                },
+                {
                     {
-                        point = muf.Potin.LEFT,
-                        relativePoint = muf.RelativePoint.LEFT,
-                        offx = mdhelperDB.mdhUser.interruptProgressBar.height + 10,
-                        offy = 0,
+                        ui { "LEFT", "LEFT", mdhelperDB.mdhUser.interruptProgressBar.height + 10, 0, },
+                        text = "",
+                    },
+                    {
+                        ui { "RIGHT", "RIGHT", -10, 0, },
                         text = ""
-                    }, {
-                    point = muf.Potin.RIGHT,
-                    relativePoint = muf.RelativePoint.RIGHT,
-                    offx = -10,
-                    offy = 0,
-                    text = ""
-                }
-                }, {
+                    }
+                },
+                {
                     {
-                        point = muf.Potin.LEFT,
-                        relativePoint = muf.RelativePoint.LEFT,
-                        offx = 0,
-                        offy = 0,
-                        width = mdhelperDB.mdhUser.interruptProgressBar.height,
-                        height = mdhelperDB.mdhUser.interruptProgressBar.height
+                        ui { "LEFT", "LEFT", 0, 0, },
+                        size = {
+                            mdhelperDB.mdhUser.interruptProgressBar.height,
+                            mdhelperDB.mdhUser.interruptProgressBar.height
+                        },
                     }
                 })
         muc.interruptProgressbar = interruptProgressbar
@@ -208,11 +234,10 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         local interruptProgressbarBtn = muc.createButton(
             "interruptProgressbarBtn",
             interruptProgressbarBtnTxt,
-            interruptSubPanel, 70, 30,
-            muf.createMdhPotin(
-                muf.Potin.TOPLEFT,
-                muf.RelativePoint.TOPLEFT, 0,
-                -40), function(btnSelf)
+            interruptSubPanel, nil,
+            { 70, 30 },
+            { "TOPLEFT", "TOPLEFT", 0, -40 },
+            function(btnSelf)
                 mdhelper.UICore.interruptProgressbarBtnClick(btnSelf,
                     interruptProgressbar,
                     mdhelperDB)
@@ -220,18 +245,23 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 
         -- 进度条设置宽 文本
         local interruptProgressbarWidthlbl =
-            muc.createFont(interruptSubPanel, muf.createMdhPotin(
-                muf.Potin.TOPLEFT, muf.RelativePoint.TOPLEFT, 80,
-                -50), "进度条宽", 15)
+            muc.createFont(
+                interruptSubPanel,
+                nil,
+                nil,
+                nil,
+                { "TOPLEFT", "TOPLEFT", 80, -50 },
+                "进度条宽",
+                15)
 
         -- 进度条设置宽 滑动条
         local interruptProgressbarWidthSilderBar =
-            muc.createHorizontalSliderBar("interruptProgressbarWidthSilderBar",
-                interruptSubPanel, 180, 20,
-                muf.createMdhPotin(muf.Potin.TOPLEFT,
-                    muf.RelativePoint
-                    .TOPLEFT, 160,
-                    -45),
+            muc.createHorizontalSliderBar(
+                "interruptProgressbarWidthSilderBar",
+                interruptSubPanel,
+                "OptionsSliderTemplate",
+                { 180, 20 },
+                { "TOPLEFT", "TOPLEFT", 160, -45 },
                 function(self, value)
                     mdhelper.UICore.interruptProgressbarWidthSilderBarSilder(self,
                         value,
@@ -241,18 +271,22 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 
         -- 进度条设置高 文本
         local interruptProgressbarHeightlbl =
-            muc.createFont(interruptSubPanel, muf.createMdhPotin(
-                muf.Potin.TOPLEFT, muf.RelativePoint.TOPLEFT,
-                360, -50), "进度条高", 15)
+            muc.createFont(
+                interruptSubPanel,
+                nil,
+                nil,
+                nil,
+                { "TOPLEFT", "TOPLEFT", 360, -50 },
+                "进度条高", 15)
 
         -- 进度条设置高 滑动条
         local interruptProgressbarHeightSilderBar =
-            muc.createHorizontalSliderBar("interruptProgressbarHeightSilderBar",
-                interruptSubPanel, 180, 20,
-                muf.createMdhPotin(muf.Potin.TOPLEFT,
-                    muf.RelativePoint
-                    .TOPLEFT, 440,
-                    -45),
+            muc.createHorizontalSliderBar(
+                "interruptProgressbarHeightSilderBar",
+                interruptSubPanel,
+                "OptionsSliderTemplate",
+                { 180, 20 },
+                { "TOPLEFT", "TOPLEFT", 440, -45 },
                 function(self, value)
                     mdhelper.UICore.interruptProgressbarHeightSilderBarSilder(self,
                         value,
@@ -263,175 +297,261 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
                 end)
 
         ----------------------------------------------------------------------------------------------------------------------
-        ---tab
-        ---ceshi
+        ---打断提醒窗体 左右Frame
+        ---左侧Frame 有 打断法术 按钮 和  减伤提醒 按钮 点击不同的按钮右侧将会出现不同的法术面板
+        ---右侧frame 结构基本相同，包括一个添加法术的 文本框和按钮 以及 一个带有滚动条的table。table中包含 序号 法术ID 法术名称 以及一个可以删除的按钮
+        ---点击每一行的删除按钮则删除当前法术，并同步 SavedVariables 的 mdhelperDB
         ----------------------------------------------------------------------------------------------------------------------
-        -- 创建父Frame，容器框架
         -- 创建主界面Frame
-        -- 创建主背景框架
-        local settingPanelFrame = CreateFrame("Frame", "settingPanelFrame", interruptSubPanel, "BackdropTemplate")
-        settingPanelFrame:SetSize(680, 500)
-        settingPanelFrame:SetPoint("TOPLEFT", -15, -90)
-        settingPanelFrame:SetBackdropColor(0, 0, 0, 0)
+        local settingPanelFrame = muc.createFrame(
+            nil,
+            "settingPanelFrame",
+            interruptSubPanel,
+            "BackdropTemplate",
+            { "TOPLEFT", -15, -90 },
+            { 680, 500 },
+            nil,
+            {
+                backdropColor = { 0, 0, 0, 0 }
+            }
+        )
 
-        local settingLeftPanelFrame = CreateFrame("Frame", "settingLeftPanelFrame", settingPanelFrame, "BackdropTemplate")
-        settingLeftPanelFrame:SetSize(200, 500)
-        settingLeftPanelFrame:SetPoint("TOPLEFT", 5, 0)
-        settingLeftPanelFrame:SetBackdrop({
-            bgFile = nil,                                             -- 背景纹理
-            edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border", -- 边框纹理
-            edgeSize = 10,
-            insets = { left = 2, right = 2, top = 2, bottom = 2 },
-        })
-        settingLeftPanelFrame:SetBackdropColor(0, 0, 0, 0.2) -- 背景颜色（黑色，透明度0.8）
-        settingLeftPanelFrame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0.0)
+        ---创建左侧按钮列表面板
+        local settingLeftPanelFrame = muc.createFrame(
+            nil,
+            "settingLeftPanelFrame",
+            settingPanelFrame,
+            "BackdropTemplate",
+            { "TOPLEFT", 5, 0 },
+            { 200, 500 },
+            {
+                bgFile = nil,                                             -- 背景纹理
+                edgeFile = "Interface\\DialogFrame\\UI-DialogBox-Border", -- 边框纹理
+                edgeSize = 10,
+                insets = { left = 2, right = 2, top = 2, bottom = 2 },
+            },
+            {
+                backdropColor = { 0, 0, 0, 0.2 },
+                backdropBorderColor = { 0.2, 0.2, 0.2, 0.0 }
+            }
+        )
+
 
         local rightFrams = {}
-        -- 创建右侧主框架
-        local rightInterruptSpellsFrame = CreateFrame("Frame", "rightInterruptSpellsFrame", settingPanelFrame)
-        rightInterruptSpellsFrame:SetSize(460, 500)
-        rightInterruptSpellsFrame:SetPoint("TOPLEFT", 200, 0)
+        ----------------------------------------------------------------------------------------------------------------------
+        --- 右侧打断法术UI
+        ----------------------------------------------------------------------------------------------------------------------
+        ---右侧打断法术框架
+        local rightInterruptSpellsFrame = muc.createFrame(
+            nil,
+            "rightInterruptSpellsFrame",
+            settingPanelFrame,
+            nil,
+            { "TOPLEFT", 200, 0 },
+            { 460, 500 }
+        )
         rightFrams["interruptSpells"] = rightInterruptSpellsFrame
-
-
-        -- 创建 右侧打断法术滚动框架
-        local rightInterruptSpellsScrollFrame = CreateFrame(
+        -- 右侧打断法术滚动框架
+        local rightInterruptSpellsScrollFrame = muc.createFrame(
             "ScrollFrame",
             "rightInterruptSpellsScrollFrame",
             rightInterruptSpellsFrame,
-            "UIPanelScrollFrameTemplate")
-        rightInterruptSpellsScrollFrame:SetSize(460, 450)
-        rightInterruptSpellsScrollFrame:SetPoint("BOTTOMRIGHT", rightInterruptSpellsFrame, "BOTTOMRIGHT", 0, 0)
-
-
+            nil,
+            { "BOTTOMRIGHT", rightInterruptSpellsFrame, "BOTTOMRIGHT", 0, 0 },
+            { 460, 450 }
+        )
         -- 右侧打断法术滚动内容容器
-        local rightInterruptSpellsScrollContentFrame = CreateFrame(
-            "Frame",
+        local rightInterruptSpellsScrollContentFrame = muc.createFrame(
+            nil,
             "rightInterruptSpellsScrollContentFrame",
-            rightInterruptSpellsScrollFrame)
-        rightInterruptSpellsScrollContentFrame:SetSize(460, 800) -- 内容高度需大于 ScrollFrame 高度
-        rightInterruptSpellsScrollFrame:SetScrollChild(rightInterruptSpellsScrollContentFrame)
+            rightInterruptSpellsScrollFrame,
+            nil,
+            { "TOPLEFT", rightInterruptSpellsScrollFrame, "TOPLEFT", 0, 0 },
+            { 460, 800 } -- 内容高度需大于 ScrollFrame 高度
+        )
+        -- 设置滚动面板的子滚动元素 以及 初始化滚动条，并且处理OnSizeChanged
+        muc.scrollFrameSetScrollChildAndScrollFrameScrollBarInitScroll(
+            rightInterruptSpellsScrollFrame,
+            rightInterruptSpellsScrollContentFrame,
+            {
+                minValue = 0, step = 1, defaultValue = 0
+            },
+            nil
+        )
 
-        -- 初始化滚动条
-        local rightInterruptSpellsScrollbar = rightInterruptSpellsScrollFrame.ScrollBar
-        rightInterruptSpellsScrollbar:SetMinMaxValues(0,
-            rightInterruptSpellsScrollContentFrame:GetHeight() - rightInterruptSpellsScrollFrame:GetHeight())
-        rightInterruptSpellsScrollbar:SetValueStep(1)
-        rightInterruptSpellsScrollbar:SetValue(0)
 
-        -- 动态调整滚动条范围
-        rightInterruptSpellsScrollFrame:SetScript("OnSizeChanged", function()
-            rightInterruptSpellsScrollbar:SetMinMaxValues(0,
-                math.max(0,
-                    rightInterruptSpellsScrollContentFrame:GetHeight() - rightInterruptSpellsScrollFrame:GetHeight()))
-        end)
 
-        -- 添加滚动内容
-        local enableMaps = {}
-        for key, value in pairs(mdhelper.mdMaps) do
-            if value.enable then
-                enableMaps[key] = value.name
-            end
-        end
-
-        local numRows = #mdhelper.interruptSpellArray
-        local numCols = 4
         local rowHeight = 30
         local cellWidth = 100
-        local cellHeight = 30
         local rowPadding = 2
         local rows = {}
-        local function UpdateTable()
+        local interruptSpells = {
+            { "序号", "法术ID", "法术名称" }
+        }
+        for i, v in pairs(mdhelperDB.addonData.interruptSpellArray) do
+            table.insert(interruptSpells, { i, v, mspells.GetSepllName(v) })
+        end
+
+        local function UpdateTableRightInterruptSpellsScrollContentFrame()
             for i, row in ipairs(rows) do
                 row:ClearAllPoints()
-                row:SetPoint("TOP", rightInterruptSpellsScrollContentFrame, "TOP", 0,
-                    -((i - 1) * (rowHeight + rowPadding)) - 10)
+                row:SetPoint(
+                    "TOP",
+                    rightInterruptSpellsScrollContentFrame,
+                    "TOP",
+                    0,
+                    -((i - 1) * (rowHeight + rowPadding)) - 10
+                )
             end
         end
 
-        -- 创建行函数
-        local function CreateRow(rowData)
-            local row = CreateFrame("Frame", nil, rightInterruptSpellsScrollContentFrame)
-            row:SetSize(rightInterruptSpellsScrollContentFrame:GetWidth() - 20, rowHeight)
-
-            -- 行背景
-            local rowBg = row:CreateTexture(nil, "BACKGROUND")
-            rowBg:SetAllPoints()
-            rowBg:SetColorTexture(0, 0, 0, 0) -- 默认透明背景
-
-            row:SetScript("OnEnter", function()
-                rowBg:SetColorTexture(0.2, 0.4, 0.8, 0.5) -- 鼠标移入背景色
-            end)
-            row:SetScript("OnLeave", function()
-                rowBg:SetColorTexture(0, 0, 0, 0) -- 鼠标移出恢复透明
-            end)
-
-            -- 创建列
-            for j, cellData in pairs(rowData) do
-                local cell = CreateFrame("Frame", nil, row)
-                cell:SetSize(cellWidth, rowHeight)
-                cell:SetPoint("LEFT", row, "LEFT", (j - 1) * cellWidth, 0)
-
-                local cellText = cell:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                cellText:SetText(cellData)
-                cellText:SetPoint("CENTER")
-            end
-if rowData[1]
-            -- 删除按钮
-            local deleteButton = CreateFrame("Button", nil, row, "UIPanelButtonTemplate")
-            deleteButton:SetSize(60, rowHeight - 10)
-            deleteButton:SetPoint("RIGHT", row, "RIGHT", -10, 0)
-            deleteButton:SetText("删除")
-            deleteButton:SetScript("OnClick", function()
-                for i, r in ipairs(rows) do
-                    if r == row then
-                        -- 删除对应的行
-                        table.remove(rows, i)
-                        row:Hide()
-                        break
+        for index, value in pairs(interruptSpells) do
+            local rowData = value
+            local row = muc.createTableRow(
+                rightInterruptSpellsScrollContentFrame,
+                rowData,
+                rowHeight,
+                { defaultColor = { 0, 0, 0, 0 }, enterColor = { 0.2, 0.4, 0.8, 0.5 } },
+                { cellWidth, rowHeight },
+                { "LEFT", "LEFT", (index - 1) * cellWidth, 0 },
+                { "CENTER" },
+                {
+                    btnText = "删除",
+                    xmlTemplate = "UIPanelButtonTemplate",
+                    size = { 60, rowHeight - 10 },
+                    point = { "RIGHT", row, "RIGHT", -10, 0 },
+                    btnClickHandler = function()
+                        for i, r in pairs(rows) do
+                            if r == row then
+                                -- 删除对应的行
+                                table.remove(rows, i)
+                                row:Hide()
+                                break
+                            end
+                        end
+                        UpdateTableRightInterruptSpellsScrollContentFrame()
                     end
-                end
-                UpdateTable()
-            end)
-
+                }
+            )
             table.insert(rows, row)
-            UpdateTable()
-        end
-
-        -- 创建初始行
-        local data = { { "序号", "法术ID", "法术名称" } }
-        for index = 1, #mdhelperDB.addonData.interruptSpellArray do
-            local spellID = mdhelperDB.addonData.interruptSpellArray[index]
-            table.insert(data, { index - 1, spellID, mspells.GetSepllName(spellID) })
-        end
-
-        for key, value in pairs(data) do
-            -- bodyQuota
-            CreateRow(data[key])
+            UpdateTableRightInterruptSpellsScrollContentFrame()
         end
 
 
+        ----------------------------------------------------------------------------------------------------------------------
+        --- 右侧减伤提醒UI
+        ----------------------------------------------------------------------------------------------------------------------
+        ---右侧减伤提醒框架
+        local rightAvoidanceSpellsFrame = muc.createFrame(
+            nil,
+            "rightAvoidanceSpellsFrame",
+            settingPanelFrame,
+            nil,
+            { "TOPLEFT", 200, 0 },
+            { 460, 500 }
+        )
+        rightAvoidanceSpellsFrame:Hide() -- 默认隐藏
+        rightFrams["avoidanceSpells"] = rightAvoidanceSpellsFrame
+        -- 右侧减伤法术滚动框架
+        local rightAvoidanceSpellsScrollFrame = muc.createFrame(
+            "ScrollFrame",
+            "rightAvoidanceSpellsScrollFrame",
+            rightAvoidanceSpellsFrame,
+            nil,
+            { "BOTTOMRIGHT", rightAvoidanceSpellsFrame, "BOTTOMRIGHT", 0, 0 },
+            { 460, 450 }
+        )
+        -- 右侧打断法术滚动内容容器
+        local rightAvoidanceSpellsScrollContentFrame = muc.createFrame(
+            nil,
+            "rightAvoidanceSpellsScrollContentFrame",
+            rightAvoidanceSpellsScrollFrame,
+            nil,
+            { "TOPLEFT", rightAvoidanceSpellsScrollFrame, "TOPLEFT", 0, 0 },
+            { 460, 800 } -- 内容高度需大于 ScrollFrame 高度
+        )
+        -- 设置滚动面板的子滚动元素 以及 初始化滚动条，并且处理OnSizeChanged
+        muc.scrollFrameSetScrollChildAndScrollFrameScrollBarInitScroll(
+            rightAvoidanceSpellsScrollFrame,
+            rightAvoidanceSpellsScrollContentFrame,
+            {
+                minValue = 0, step = 1, defaultValue = 0
+            },
+            nil
+        )
 
 
-        -- 可选：设置背景颜色
-        local bg = rightInterruptSpellsScrollFrame:CreateTexture(nil, "BACKGROUND")
-        bg:SetAllPoints(rightInterruptSpellsScrollFrame)
-        bg:SetColorTexture(0.1, 0.1, 0.1, 0.5)
+        local avoidanceSpells = {
+            { "序号", "法术ID", "法术名称" }
+        }
+        for i, v in pairs(mdhelperDB.addonData.avoidanceSpellArray) do
+            table.insert(avoidanceSpells, { i, v, mspells.GetSepllName(v) })
+        end
 
-        -- 调整滚动行为
-        rightInterruptSpellsScrollbar:SetScript("OnValueChanged", function(self, value)
-            rightInterruptSpellsScrollFrame:SetVerticalScroll(value)
-        end)
+        local function UpdateTableRightAvoidanceSpellsScrollContentFrame()
+            for i, row in ipairs(rows) do
+                row:ClearAllPoints()
+                row:SetPoint(
+                    "TOP",
+                    rightAvoidanceSpellsScrollContentFrame,
+                    "TOP",
+                    0,
+                    -((i - 1) * (rowHeight + rowPadding)) - 10
+                )
+            end
+        end
 
+        for index, value in pairs(avoidanceSpells) do
+            local rowData = value
+            local row = muc.createTableRow(
+                rightInterruptSpellsScrollContentFrame,
+                rowData,
+                rowHeight,
+                { defaultColor = { 0, 0, 0, 0 }, enterColor = { 0.2, 0.4, 0.8, 0.5 } },
+                { cellWidth, rowHeight },
+                { "LEFT", "LEFT", (index - 1) * cellWidth, 0 },
+                { "CENTER" },
+                {
+                    btnText = "删除",
+                    xmlTemplate = "UIPanelButtonTemplate",
+                    size = { 60, rowHeight - 10 },
+                    point = { "RIGHT", row, "RIGHT", -10, 0 },
+                    btnClickHandler = function()
+                        for i, r in pairs(rows) do
+                            if r == row then
+                                -- 删除对应的行
+                                table.remove(rows, i)
+                                row:Hide()
+                                break
+                            end
+                        end
+                        UpdateTableRightAvoidanceSpellsScrollContentFrame()
+                    end
+                }
+            )
+            table.insert(rows, row)
+            UpdateTableRightAvoidanceSpellsScrollContentFrame()
+        end
+
+
+
+
+
+
+
+
+
+
+        ----------------------------------------------------------------------------------------------------------------------
+        --- 左侧按钮列表
+        ----------------------------------------------------------------------------------------------------------------------
+        ---左侧打断列表按钮
         local interruptSpellsBtn = muc.createButton(
             "interruptSpellsBtn",
             "打断列表",
-            settingLeftPanelFrame, 150, 30,
-            muf.createMdhPotin(
-                muf.Potin.TOP,
-                muf.RelativePoint.TOP,
-                5,
-                -5),
+            settingLeftPanelFrame, nil,
+            { 150, 30 },
+            { "TOP", "TOP", 5, -5 },
             function(btnSelf)
                 for k, v in pairs(rightFrams) do
                     if btnSelf.Tip == k then
@@ -442,90 +562,14 @@ if rowData[1]
                 end
             end)
         interruptSpellsBtn.Tip = "interruptSpells"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        -- 创建右侧主框架
-        local rightAvoidanceSpellsFrame = CreateFrame("Frame", "rightAvoidanceSpellsFrame", settingPanelFrame)
-        rightAvoidanceSpellsFrame:SetSize(460, 500)
-        rightAvoidanceSpellsFrame:SetPoint("TOPLEFT", 200, 0)
-        rightFrams["avoidanceSpells"] = rightAvoidanceSpellsFrame
-        rightAvoidanceSpellsFrame:Hide()
-
-        -- 创建 右侧打断法术滚动框架
-        local rightAvoidanceSpellsScrollFrame = CreateFrame(
-            "ScrollFrame",
-            "rightAvoidanceSpellsScrollFrame",
-            rightAvoidanceSpellsFrame,
-            "UIPanelScrollFrameTemplate")
-        rightAvoidanceSpellsScrollFrame:SetSize(460, 450)
-        rightAvoidanceSpellsScrollFrame:SetPoint("BOTTOMRIGHT", rightAvoidanceSpellsFrame, "BOTTOMRIGHT", 0, 0)
-
-
-        -- 右侧打断法术滚动内容容器
-        local rightAvoidanceSpellsScrollContentFrame = CreateFrame(
-            "Frame",
-            "rightAvoidanceSpellsScrollContentFrame",
-            rightAvoidanceSpellsScrollFrame)
-        rightAvoidanceSpellsScrollContentFrame:SetSize(460, 800) -- 内容高度需大于 ScrollFrame 高度
-        rightAvoidanceSpellsScrollFrame:SetScrollChild(rightAvoidanceSpellsScrollContentFrame)
-
-        -- 初始化滚动条
-        local rightAvoidanceSpellsScrollbar = rightAvoidanceSpellsScrollFrame.ScrollBar
-        rightAvoidanceSpellsScrollbar:SetMinMaxValues(0,
-            rightAvoidanceSpellsScrollContentFrame:GetHeight() - rightAvoidanceSpellsScrollFrame:GetHeight())
-        rightAvoidanceSpellsScrollbar:SetValueStep(1)
-        rightAvoidanceSpellsScrollbar:SetValue(0)
-
-        -- 动态调整滚动条范围
-        rightAvoidanceSpellsScrollFrame:SetScript("OnSizeChanged", function()
-            rightAvoidanceSpellsScrollbar:SetMinMaxValues(0,
-                math.max(0,
-                    rightAvoidanceSpellsScrollContentFrame:GetHeight() - rightAvoidanceSpellsScrollFrame:GetHeight()))
-        end)
-
-        -- 添加滚动内容
-        for i = 1, 100 do
-            local item = rightAvoidanceSpellsScrollContentFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            item:SetPoint("TOPLEFT", 10, -20 * (i - 1))
-            item:SetText("Item Item Item " .. i)
-        end
-
-        -- 可选：设置背景颜色
-        local bg = rightAvoidanceSpellsScrollFrame:CreateTexture(nil, "BACKGROUND")
-        bg:SetAllPoints(rightAvoidanceSpellsScrollFrame)
-        bg:SetColorTexture(0.1, 0.1, 0.1, 0.5)
-
-        -- 调整滚动行为
-        rightAvoidanceSpellsScrollbar:SetScript("OnValueChanged", function(self, value)
-            rightAvoidanceSpellsScrollFrame:SetVerticalScroll(value)
-        end)
-
+        ---左侧法减伤列表按钮
         local avoidanceSpellsBtn = muc.createButton(
             "avoidanceSpellsBtn",
             "减伤列表",
-            settingLeftPanelFrame, 150, 30,
-            muf.createMdhPotin(
-                muf.Potin.TOP,
-                muf.RelativePoint.TOP,
-                5,
-                -40),
+            settingLeftPanelFrame,
+            nil,
+            { 150, 30 },
+            { "TOP", "TOP", 5, -40 },
             function(btnSelf)
                 for k, v in pairs(rightFrams) do
                     if btnSelf.Tip == k then
@@ -547,11 +591,13 @@ if rowData[1]
         updateSubPanel.name = "updateSubPanel"
 
         -- 标题
-        local updateSubPanelTitle = muc.createFont(updateSubPanel,
-            muf.createMdhPotin(
-                muf.Potin.TOPLEFT,
-                muf.RelativePoint.TOPLEFT,
-                16, -10), "更新日志",
+        local updateSubPanelTitle = muc.createFont(
+            updateSubPanel,
+            nil,
+            nil,
+            nil,
+            { "TOPLEFT", "TOPLEFT", 16, -10 },
+            "更新日志",
             30)
 
         local OpenUpDate = CreateFrame("Button", "OpenUpDate", updateSubPanel,
@@ -594,11 +640,15 @@ if rowData[1]
                 self:SetColorTexture(0.5, 0.5, 0.5, 0.1)
             end)
 
-            local lefttext = rowFrame:CreateFontString(nil, "ARTWORK",
-                "GameFontHighlight")
-            lefttext:SetPoint("LEFT", SliderBackground, "LEFT", 5, -1)
-            lefttext:SetText(name)
-            lefttext:SetFont("fonts\\ARHei.ttf", 18, "OUTLINE")
+            local lefttext = muc.createFont(
+                rowFrame,
+                nil,
+                nil,
+                "GameFontHighlight",
+                { "LEFT", SliderBackground, "LEFT", 5, -1 },
+                name,
+                { mf.ARHei, 18, "OUTLINE" }
+            )
             lefttext:SetJustifyH("LEFT")
             lefttext:SetWordWrap(true)                               -- 换行
             lefttext:SetWidth(623)

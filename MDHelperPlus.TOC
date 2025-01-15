@@ -8,10 +8,11 @@
 Update.lua
 db/DefaultDB.lua
 
-Options/CoreHelper.lua
-Options/UIHelper.lua
-Options/SpellsHelper.lua
-Options/ComponentsHelper.lua
+Options/mcore.lua
+Options/muf.lua
+Options/mspells.lua
+Options/muc.lua
+Options/mah.lua
 
 UICore.lua
 UICoreEventHandler.lua

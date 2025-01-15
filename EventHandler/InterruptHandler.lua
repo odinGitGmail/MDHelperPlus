@@ -3,14 +3,16 @@ local mah = mdhelper.AddonsHelper
 mdhelper.UI.components.Func.Progress = {}
 local mucfp = mdhelper.UI.components.Func.Progress
 
-----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
+--[[
+打断进度条相关事件处理
+]] --
 
 -- 定义更新函数
 local startTime, endTime, ticker
 local currentProgress = 0
 
--- 施法进度条更新
+----------------------------------------------------------------------------------------------------------------------
+---施法进度条更新
 function mucfp.UpdateCastingProgress(interruptProgressbar, progressText,
                                      timerText, icon)
     local name, text, texture, startTime, endTime, isTradeSkill, castID,
@@ -58,7 +60,8 @@ function mucfp.UpdateCastingProgress(interruptProgressbar, progressText,
     end
 end
 
--- 引导施法进度条更新
+----------------------------------------------------------------------------------------------------------------------
+---引导施法进度条更新
 function mucfp.UpdateChannelProgress(interruptProgressbar, progressText,
                                      timerText, icon)
     local name, text, texture, startTime, endTime, isTradeSkill,
@@ -106,7 +109,8 @@ function mucfp.UpdateChannelProgress(interruptProgressbar, progressText,
     end
 end
 
--- 开始监控施法进度条
+----------------------------------------------------------------------------------------------------------------------
+---开始监控施法进度条
 function mucfp.StartCastingProgress(interruptProgressbar, progressText,
                                     timerText, icon)
     if not ticker then
@@ -120,7 +124,8 @@ function mucfp.StartCastingProgress(interruptProgressbar, progressText,
     end
 end
 
--- 开始监控引导进度条
+----------------------------------------------------------------------------------------------------------------------
+---开始监控引导进度条
 function mucfp.StartChannelProgress(interruptProgressbar, progressText,
                                     timerText, icon)
     if not ticker then
@@ -134,7 +139,8 @@ function mucfp.StartChannelProgress(interruptProgressbar, progressText,
     end
 end
 
--- 结束监控并隐藏打断进度条
+----------------------------------------------------------------------------------------------------------------------
+---结束监控并隐藏打断进度条
 function mucfp.HideProgress(interruptProgressbar, progressText, timerText, icon)
     if ticker then
         ticker:Cancel()

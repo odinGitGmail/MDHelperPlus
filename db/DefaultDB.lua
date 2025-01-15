@@ -8,6 +8,12 @@ mdhelper.UI.components.Func = {}
 mdhelper.Core = {}
 mdhelper.Spells = {}
 
+mdhelper.fonts = {
+    ARHei = "fonts\\ARHei.ttf",
+    fontXmlTemplate = {
+        GameFontNormal = "GameFontNormal"
+    }
+}
 mdhelper.Career = {
     ["deathknight"] = "死亡骑士",
     ["demonhunter"] = "恶魔猎手",

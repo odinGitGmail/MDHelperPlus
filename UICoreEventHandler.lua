@@ -1,13 +1,20 @@
 local addonName, mdhelper = ...
-
 mdhelper.UICore = {}
 
+--[[
+UI界面相关事件处理
+]] --
+
+----------------------------------------------------------------------------------------------------------------------
+--确认法术按钮点击事件
 function mdhelper.UICore.saveInterruptSpellIDBtnClick(interruptSpellIDTxtBox,
                                                       mdhelperdb)
     local ssid = interruptSpellIDTxtBox:GetText()
     mdhelperdb["playerInfo"]["interruptSpellID"] = ssid
 end
 
+----------------------------------------------------------------------------------------------------------------------
+--打断进度条 隐藏、显示锚点 按钮点击事件
 function mdhelper.UICore.interruptProgressbarBtnClick(btnSelf,
                                                       interruptProgressbar,
                                                       mdhelperdb)
@@ -31,6 +38,8 @@ function mdhelper.UICore.interruptProgressbarBtnClick(btnSelf,
         .drag)
 end
 
+----------------------------------------------------------------------------------------------------------------------
+--打断进度条 宽度调整滑动条
 function mdhelper.UICore.interruptProgressbarWidthSilderBarSilder(self, value,
                                                                   interruptProgressbar,
                                                                   mdhelperdb)
@@ -49,6 +58,8 @@ function mdhelper.UICore.interruptProgressbarWidthSilderBarSilder(self, value,
     interruptProgressbar:SetWidth(mdhelperdb.mdhUser.interruptProgressBar.width)
 end
 
+----------------------------------------------------------------------------------------------------------------------
+--打断进度条 高度调整滑动条
 function mdhelper.UICore.interruptProgressbarHeightSilderBarSilder(self, value,
                                                                    interruptProgressbar,
                                                                    iconFrams,

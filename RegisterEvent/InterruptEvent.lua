@@ -4,16 +4,11 @@ local mspells = mdhelper.Spells
 local muc = mdhelper.UI.components
 local mucfp = mdhelper.UI.components.Func.Progress
 
-
-
-
+--[[
+打断进度条相关事件
+]] --
 
 ----------------------------------------------------------------------------------------------------------------------
-----------------------------------------------------------------------------------------------------------------------
-
-
-
-
 -- 创建事件框架
 local eventFrameInterrupt = CreateFrame("Frame")
 eventFrameInterrupt:RegisterEvent("UNIT_SPELLCAST_START")
@@ -23,8 +18,8 @@ eventFrameInterrupt:RegisterEvent("UNIT_SPELLCAST_CHANNEL_START")
 eventFrameInterrupt:RegisterEvent("UNIT_SPELLCAST_CHANNEL_STOP")
 
 
-
--- 事件处理函数
+----------------------------------------------------------------------------------------------------------------------
+---事件处理函数
 eventFrameInterrupt:SetScript("OnEvent", function(self, event, unit)
     if mdhelperDB.mdhUser.interrupt then
         if unit ~= "focus" then return end -- 只处理焦点目标的事件
