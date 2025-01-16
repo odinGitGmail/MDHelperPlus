@@ -340,12 +340,8 @@ end
 ---文本框
 function muc.createTextBox(txtBoxName, parentUI, xmlTemplate, size, uiPoint, defaultTxt)
 	-- 创建一个文本框
-	local textBox = {}
-	if xmlTemplate ~= nil then
-		textBox = CreateFrame("EditBox", txtBoxName, parentUI, xmlTemplate)
-	else
-		textBox = CreateFrame("EditBox", txtBoxName, parentUI)
-	end
+	local textBox = CreateFrame("EditBox", txtBoxName, parentUI, xmlTemplate or "InputBoxTemplate")
+
 	textBox:SetSize(unpack(size)) -- 设置宽度和高度
 	if uiPoint ~= nil then
 		if #uiPoint == 4 then

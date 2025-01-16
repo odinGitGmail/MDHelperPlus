@@ -308,7 +308,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
         ---右侧frame 结构基本相同，包括一个添加法术的 文本框和按钮 以及 一个带有滚动条的table。table中包含 序号 法术ID 法术名称 以及一个可以删除的按钮
         ---点击每一行的删除按钮则删除当前法术，并同步 SavedVariables 的 mdhelperDB
         ----------------------------------------------------------------------------------------------------------------------
-        -- 创建主界面Frame
+        -- 法术列表和添加删除主界面Frame
         local settingPanelFrame = muc.createFrame(
             nil,
             "settingPanelFrame",
@@ -322,7 +322,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             }
         )
 
-        ---创建左侧按钮列表面板
+        ---左侧按钮列表面板
         local settingLeftPanelFrame = muc.createFrame(
             nil,
             "settingLeftPanelFrame",
@@ -356,6 +356,26 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
             { "TOPLEFT", "TOPLEFT", 200, 0 },
             { 460, 500 }
         )
+        --- 打断法术添加文本框和按钮
+        local interruptSpellTextBox = muc.createTextBox(
+            "interruptSpellTextBox",
+            rightInterruptSpellsFrame,
+            nil,
+            { 140, 65 },
+            { "TOPLEFT", "TOPLEFT", 35, 5 }
+        )
+        ---添加按钮
+        local interruptSpellsAddBtn = muc.createButton(
+            "interruptSpellsAddBtn",
+            "添加",
+            rightInterruptSpellsFrame,
+            "UIPanelButtonTemplate",
+            { 70, 30 },
+            { "TOPLEFT", "TOPLEFT", 185, -10 },
+            function(btnSelf)
+
+            end)
+
         rightFrams["interruptSpells"] = rightInterruptSpellsFrame
         -- 右侧打断法术滚动框架
         local rightInterruptSpellsScrollFrame = muc.createFrame(
